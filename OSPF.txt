@@ -1,0 +1,22 @@
+cat <<EOF >> /etc/frr/frr.conf
+!
+interface tun1
+ ipv6 ospf6 area 0
+ no ip ospf passive
+exit
+!
+interface ens19
+ ipv6 ospf6 area 0
+exit
+!
+router ospf
+ passive-interface default
+ network 172.16.100.0/24 area 0
+ network 192.168.200.0/28 area 0
+exit
+!
+router ospf6
+ ospf6 router-id 22.22.22.22
+exit
+!
+EOF
