@@ -68,31 +68,7 @@ apt-get update && apt-get install -y frr
 sed -i 's/ospfd=no/ospfd=yes/g' /etc/frr/daemons
 sed -i 's/ospf6d=no/ospf6d=yes/g' /etc/frr/daemons
 systemctl enable --now frr
- 
-cat <<EOF >> /etc/frr/frr.conf
-!
-interface tun1
- ipv6 ospf6 area 0
- no ip ospf passive
-exit
-!
-interface enp0s8
- ipv6 ospf6 area 0
-exit
-!
-router ospf
- passive-interface default
- network 172.16.100.0/24 area 0
- network 192.168.100.0/26 area 0
-exit
-!
-router ospf6
- ospf6 router-id 11.11.11.11
-exit
-!
-EOF
-systemctl restart frr
- 
+
 resolvconf -u
 echo "nameserver 77.88.8.8" >> /etc/resolv.conf
  
