@@ -99,7 +99,7 @@ echo "nameserver 77.88.8.8" >> /etc/resolv.conf
 apt-get update && apt-get install -y dhcp-server
  
 sed -i 's/DHCPDARGS=/DHCPDARGS=enp0s8/g' /etc/sysconfig/dhcpd
-sed -i 's/DHCPDARGS=/DHCPDARGS=enp0s8/g' /etc/sysconfig/dhcpd
+sed -i 's/DHCPDARGS=/DHCPDARGS=enp0s8/g' /etc/sysconfig/dhcpd6
  
 cp /etc/dhcp/dhcpd.conf.example /etc/dhcp/dhcpd.conf
  
@@ -120,6 +120,7 @@ subnet 192.168.100.0 netmask 255.255.255.192 {
 # hardware ethernet "mac-address hq-srv";
 #  fixed-address 192.168.100.1;
 #}
+EOF
 systemctl enable --now dhcpd
  
 cp /etc/dhcp/dhcpd6.conf.sample /etc/dhcp/dhcpd6.conf
@@ -131,14 +132,14 @@ preferred-lifetime 604000;
 option dhcp-renewal-time 36000;
 option dhcp-rebinding-time 72000;
  
-allow leasequery
+allow leasequery;
  
 option dhcp6.preference 255;
  
 option dhcp6.info-refresh-time 21600;
  
 subnet6 2000:100::/122 {
-	range 2000:100::2 2000:100::3f;
+	range6 2000:100::2 2000:100::3f;
 }
  
 #host hq-srv {
@@ -192,22 +193,9 @@ systemctl enable --now iperf3
  
 iperf3 -c 11.11.11.1 --get-server-output > /root/iperf3_logfile.txt
  
-cat <<EOF > backup-script.sh
-#!/bin/bash
+chmod +x /root/OracleDemo/backup.sh
+sh /root/backup.sh
  
-echo "Start backup!"
- 
-backup_dir="/etc"
-dest_dir="/opt/backup"
- 
-mkdir -p $dest_dir
-tar -czf $dest_dir/$(hostname -s)-$(date +"%d.%m.%y").tgz $backup_dir
- 
-echo "Done"
-EOF
-chmox +x backup-script.sh
-sh /root/backup-script.sh
- 
-firewall-cmd --permanent --zone=public --add-forward-port=port=22:proto=tcp:to-port=2222:toaddr=192.168.100.5
-firewall-cmd --permanent --zone=public --add-forward-port=port=22:proto=tcp:to-port=2222:toaddr=2000:100::2
+firewall-cmd --permanent --zone=public --add-forward-port=port=22:proto=tcp:toport=2222:toaddr=192.168.100.5
+firewall-cmd --permanent --zone=public --add-forward-port=port=22:proto=tcp:toport=2222:toaddr=2000:100::2
 firewall-cmd --reload
