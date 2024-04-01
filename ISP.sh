@@ -43,5 +43,5 @@ firewall-cmd --reload
 systemctl restart firewalld
 systemctl restart network
 
-apt-get install iperf3
+apt-get install -y iperf3
 systemctl enable --now iperf3
