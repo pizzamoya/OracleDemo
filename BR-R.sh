@@ -76,6 +76,6 @@ passwd branch-admin
 useradd network-admin -m -c "Network admin" -U
 passwd network-admin
 
-chmod +x /root/momo/backup.sh
-sh /root/momo/backup.sh
+chmod +x /root/OracleDemo/backup.sh
+sh /root/OracleDemo/backup.sh
 ls /opt/
