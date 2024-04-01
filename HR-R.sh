@@ -194,7 +194,7 @@ systemctl enable --now iperf3
 iperf3 -c 11.11.11.1 --get-server-output > /root/iperf3_logfile.txt
  
 chmod +x /root/OracleDemo/backup.sh
-sh /root/backup.sh
+sh /root/OracleDemo/backup.sh
  
 firewall-cmd --permanent --zone=public --add-forward-port=port=22:proto=tcp:toport=2222:toaddr=192.168.100.5
 firewall-cmd --permanent --zone=public --add-forward-port=port=22:proto=tcp:toport=2222:toaddr=2000:100::2
