@@ -176,7 +176,7 @@ interface enp0s8
 		AdvAutonomous on;
 		AdvRouterAddr on;
 	};
-];
+};
 EOF
  
 systemctl restart dhcpd6
